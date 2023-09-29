@@ -1,20 +1,49 @@
-import Photo01 from '../assets/img/image 12.png'
-import Star from '../assets/img/Star.png'
 
-function Card(){
-    return(
+import PropTypes from 'prop-types';
+import Star from '../assets/img/Star.png'
+function Card(props) {
+    let badgeText
+    if (props.openSpots === 0) {
+        badgeText = "SOLD OUT"
+    } else if (props.location === "Online") {
+        badgeText = "ONLINE"
+    }
+    
+    return (
         <div className="card">
-            <div className="card--photo">
-            <button className="card--button">Sold Out</button>
-            <img src={Photo01} alt="photo expirence" className="card--photo_expirence"/>
+            {
+                badgeText && 
+                <div className="card--badge">{badgeText}</div>
+            }
+            <img 
+                src={props.coverImg} 
+                className="card--image" 
+            />
+            <div className="card--stats">
+                <img src={Star} className="card--star" />
+                <span>{props.stats.rating}</span>
+                <span className="gray">({props.stats.reviewCount}) • </span>
+                <span className="gray">{props.location}</span>
             </div>
-            <div className='card--text'>
-                <img src={Star} alt='star'/>
-                <spam>5.0</spam><p> (6) USA </p>
-                <p>Life lessons with Katie Zaferes</p>
-                <span>From $136</span><p>/ person</p>
-            </div>
-            </div>
+            <p className="card--title">{props.title}</p>
+            <p className="card--price">
+                <span className="bold">From ${props.price}</span> / person
+            </p>
+        </div>
     )
 }
-export default Card
+
+Card.propTypes = {
+    openSpots: PropTypes.number.isRequired,
+    location: PropTypes.string.isRequired,
+    coverImg: PropTypes.string.isRequired,
+    stats: PropTypes.shape({
+        rating: PropTypes.number.isRequired,
+        reviewCount: PropTypes.number.isRequired
+    }).isRequired,
+    title: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired
+};
+
+export default Card;
+
